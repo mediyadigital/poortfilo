@@ -1,0 +1,550 @@
+<?php
+declare(strict_types=1);
+$pageTitle = "Mediya Digital — Portfolio";
+?>
+<!doctype html>
+<html lang="ku" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8fafc">
+<meta name="description" content="Mediya Digital — سیستەم، وێبسایت، براندینگ و دیزاین بۆ بزنسێن نوی.">
+<title><?= htmlspecialchars($pageTitle, ENT_QUOTES, "UTF-8") ?></title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- زێدەکرنا پەرتووکخانا ئایکۆنان یا جیهانی FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* Mediya Digital Design System - Glassmorphism Edition */
+:root{--ink:#12213f;--blue:#155eef;--muted:#6f7d92;--line:#dfe7f3;--mist:#e9f1ff;--navy:#10244a;--white:#fff;--bg:#f8fafc;--glass-bg:rgba(255,255,255,0.55);--glass-border:rgba(255,255,255,0.9);--glass-shadow:0 8px 32px rgba(21,94,239,0.08);}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans Arabic', 'Space Grotesk', system-ui,sans-serif; overflow-x: hidden;}a{color:inherit;text-decoration:none}button{font:inherit}
+
+/* پاشبنەمایا برقەدار و لڤۆک بۆ دیزاینا شیشەیی */
+.shell{min-height:100vh;overflow:hidden;position:relative;background:var(--bg); z-index: 1;}
+.shell::before, .shell::after { content: ""; position: fixed; border-radius: 50%; filter: blur(90px); z-index: -1; pointer-events: none; opacity: 0.6; animation: pulseGlow 12s alternate infinite ease-in-out; }
+.shell::before { width: 50vw; height: 50vw; background: #e0eaff; top: -10%; left: -10%; }
+.shell::after { width: 40vw; height: 40vw; background: #dce7fa; bottom: -10%; right: -5%; animation-delay: -6s; background: linear-gradient(135deg, #dce7fa, #cbe0ff); }
+@keyframes pulseGlow { 0% { transform: scale(1) translate(0,0); } 100% { transform: scale(1.3) translate(40px, 40px); } }
+
+.grain{position:fixed;inset:0;pointer-events:none;opacity:.04;z-index:10;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E")}
+
+/* مینیۆیا سەرێ یا شیشەیی */
+.topbar{height:76px;display:flex;align-items:center;justify-content:space-between;max-width:100%;margin:auto;padding:0 5vw;position:sticky;top:0;z-index:999; background: rgba(248, 250, 252, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.6); transition: all 0.3s;}
+.brand{display:flex;align-items:center;gap:10px;direction:ltr;font:20px 'Space Grotesk',sans-serif;letter-spacing:-.06em}.brand-mark{width:30px;height:30px;border:2px solid var(--blue);background:linear-gradient(135deg,var(--ink) 0 45%,var(--blue) 46%);clip-path:polygon(0 0,100% 0,100% 100%,50% 70%,0 100%); transition: 0.4s;}.brand:hover .brand-mark { transform: rotate(90deg); }
+.brand b{font-weight:800}.brand em{font-style:normal;color:var(--blue);font-weight:500;margin-left:2px}.nav{display:flex;align-items:center;gap:34px;color:#5d6b85;font-size:14px; font-weight:600;}.nav a{transition: 0.2s;} .nav a:hover{color:var(--blue); transform: translateY(-2px);}
+.actions{display:flex;align-items:center;gap:16px;direction:ltr}.langs{display:flex;gap:2px;padding:3px;background:rgba(238,243,251,0.8); backdrop-filter: blur(5px); border-radius:99px}.langs button{border:0;background:transparent;color:#78859b;font:11px 'Space Grotesk';padding:5px 10px;border-radius:99px;cursor:pointer; font-weight: bold; transition:0.3s;}.langs button.active{background:#fff;color:var(--blue);box-shadow:0 2px 8px #1c3e7d14}
+.cta,.primary{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:8px;background:linear-gradient(135deg, var(--blue), #0b4aca);color:#fff;padding:11px 16px;font-size:13px;font-weight:700;cursor:pointer;transition:.3s ease; box-shadow: 0 4px 15px rgba(21, 94, 239, 0.3);}.cta:hover,.primary:hover{transform:translateY(-3px);box-shadow:0 12px 25px rgba(21,94,239,0.4)}.menu{display:none;border:0;background:none;color:var(--ink);font-size:24px;cursor:pointer}
+.pad{max-width:1320px;margin:auto;padding-left:36px;padding-right:36px}.hero{min-height:660px;display:grid;grid-template-columns:1fr 1.1fr;gap:72px;align-items:center;padding-top:55px;padding-bottom:82px; }.copy{padding-top:18px}.eyebrow,.num{display:flex;align-items:center;gap:8px;color:var(--blue);font:600 11px 'Space Grotesk';letter-spacing:.08em;direction:ltr}.dot{width:7px;height:7px;background:var(--blue);border-radius:50%;box-shadow:0 0 0 5px #155eef18; animation: pulseDot 2s infinite; } @keyframes pulseDot { 0% {box-shadow:0 0 0 0 #155eef66;} 70% {box-shadow:0 0 0 8px #155eef00;} 100% {box-shadow:0 0 0 0 #155eef00;} }
+.hero h1{font-size:clamp(42px,5.3vw,74px);line-height:1.18;letter-spacing:-.08em;margin:24px 0 18px;font-weight:800}.hero h1 span{color:var(--blue)}.lead{max-width:540px;color:#64738d;font-size:17px;line-height:2;margin:0 0 28px; font-weight: 500;}.hero-actions{display:flex;align-items:center;gap:22px}.text-link{display:inline-flex;align-items:center;gap:8px;color:#425372;font-size:13px;font-weight:700; transition:0.3s;}.text-link:hover{color:var(--blue); transform: translateX(-5px);}.meta{display:flex;gap:34px;margin-top:50px;padding-top:22px;border-top:1px solid rgba(223,231,243,0.5)}.meta div{display:flex;flex-direction:column;gap:4px}.meta strong{font:700 21px 'Space Grotesk'}.meta span{color:#8390a4;font-size:12px; font-weight: 600;}
+
+/* لڤینێن نەرم یێن سەراڤی بۆ وێنەیان */
+@keyframes floatUpDown { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+.visual{position:relative;direction:ltr;padding-top:30px}.visual-kicker{position:absolute;top:0;right:22px;font:600 10px 'Space Grotesk';letter-spacing:.1em;color:#8493aa}.visual-kicker i{display:inline-block;width:5px;height:5px;background:#3ecf8e;border-radius:50%;margin:0 6px}.frame{overflow:hidden;border-radius:20px;border:1px solid var(--glass-border);box-shadow:0 25px 60px rgba(34, 70, 122, 0.15);background:var(--glass-bg); backdrop-filter:blur(15px); animation: floatUpDown 6s ease-in-out infinite;}.frame img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover; cursor: pointer; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);}.frame img:hover{transform: scale(1.05);}
+.note{position:absolute;display:flex;align-items:center;gap:8px;padding:11px 14px;background:var(--glass-bg); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--glass-border);border-radius:12px;box-shadow:var(--glass-shadow);color:#4b5c78;font-size:12px; font-weight: 600;}.note.a{top:80px;left:-30px; animation: floatUpDown 7s ease-in-out infinite 0.5s;}.note.b{bottom:42px;right:-25px; animation: floatUpDown 5s ease-in-out infinite 1s;}.index{color:#93a0b2;font:500 11px 'Space Grotesk';margin-top:15px}
+.trust{border-top:1px solid rgba(223,231,243,0.5);border-bottom:1px solid rgba(223,231,243,0.5);max-width:1320px;margin:auto;padding:23px 36px;display:grid;grid-template-columns:repeat(4,1fr); background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.4), rgba(255,255,255,0));}.trust div{display:flex;flex-direction:column;gap:5px;padding-right:24px;border-right:1px solid rgba(223,231,243,0.5); transition: 0.3s;}.trust div:hover { transform: translateY(-3px); }.trust div:first-child{border-right:0}.trust span{color:#91a0b3;font-size:12px; font-weight: 600;}.trust b{color:#244068;font:600 11px 'Space Grotesk';letter-spacing:.06em;direction:ltr}
+.section{padding-top:110px;padding-bottom:90px}.heading{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;margin-bottom:38px}.heading>div{position:relative;padding-right:20px}.heading>div:before{content:"";position:absolute;right:0;top:3px;bottom:3px;width:3px;background:var(--blue);border-radius:99px;box-shadow:0 0 0 5px #155eef12}.heading h2{margin:12px 0 0;font-size:clamp(28px,3.5vw,44px);letter-spacing:-.06em;line-height:1.3; font-weight: 800;}.heading p{color:#7b889d;max-width:410px;font-size:15px;line-height:1.9;margin:0; font-weight: 500;}.services{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+
+/* دیزاینا شیشەیی بۆ کارتان (Glassmorphism Cards) */
+.service, .system-card, .project {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: var(--glass-shadow);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    position: relative;
+    min-height: 342px;
+    padding: 22px;
+}
+.service:before{content:"";position:absolute;inset:0;opacity:.2;pointer-events:none;background-image:linear-gradient(#d9e5f4 1px,transparent 1px),linear-gradient(90deg,#d9e5f4 1px,transparent 1px);background-size:18px 18px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.55),transparent 45%)}.service:after{content:"";position:absolute;top:16px;left:16px;width:5px;height:5px;border-radius:50%;background:var(--blue);box-shadow:10px 0 0 #9bbaf1,20px 0 0 #d9e5f4}
+.service:hover, .system-card:hover, .project:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(21, 94, 239, 0.15);
+    border-color: rgba(255, 255, 255, 1);
+    background: rgba(255,255,255,0.8);
+}
+.service-media{position:relative;margin:-22px -22px 0;height:132px;overflow:hidden;background:#edf4ff;border-bottom:1px solid rgba(219, 230, 244, 0.5)}.service-media:after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,#155eef1c,transparent 55%);pointer-events:none}.service-media img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .5s ease; cursor:pointer;}.service:hover .service-media img{transform:scale(1.08)}.service-media span{position:absolute;z-index:1;top:10px;left:10px;padding:5px 7px;background:rgba(255,255,255,0.9); backdrop-filter:blur(4px); border:1px solid #dbe6f4;border-radius:5px;color:var(--blue);font:600 9px 'Space Grotesk';letter-spacing:.05em;direction:ltr}.service>*{position:relative;z-index:1}.service-body{position:relative;padding-top:18px}.service-top{display:flex;justify-content:space-between;direction:ltr;color:var(--blue);font:11px 'Space Grotesk'}.service h3{font-size:16px;margin:16px 0 4px; font-weight: 800;}.service .en{color:var(--blue);font:600 11px 'Space Grotesk';direction:ltr}.service p{color:#7b879a;font-size:12px;line-height:1.8;margin:0; font-weight: 500;}
+.system{padding-top:20px;padding-bottom:100px}.showcase{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}.media{position:relative;aspect-ratio:4/3;overflow:hidden;background:#edf4ff}.media img{width:100%;height:100%;display:block;object-fit:cover; cursor:pointer; transition:0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);}.system-card:hover .media img{transform:scale(1.05);}.status{position:absolute;top:14px;left:14px;padding:7px 10px;border-radius:6px;background:rgba(255,255,255,0.9); backdrop-filter:blur(5px); color:#4c607f;font:600 10px 'Space Grotesk';direction:ltr;box-shadow:0 6px 14px rgba(23,58,107,0.1)}.status i{display:inline-block;width:6px;height:6px;background:#31b979;border-radius:50%;margin-right:6px; animation: pulseDot 2s infinite;}.system-copy{padding:22px 24px 24px}.system-label{display:flex;justify-content:space-between;color:#8b9bb0;font:600 10px 'Space Grotesk';direction:ltr;letter-spacing:.07em}.system-label span{color:var(--blue)}.system-copy h3{margin:13px 0 7px;font-size:20px;letter-spacing:-.05em; font-weight: 800;}.system-copy p{color:#6f7d92;font-size:13px;line-height:1.9;min-height:48px;margin:0; font-weight: 500;}
+.projects{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:16px}.project-img{height:235px;overflow:hidden;background:#edf4ff; position: relative;}.project-img img{width:100%;height:100%;object-fit:cover;transition:.5s; cursor:pointer;}.project:hover img{transform:scale(1.08)}.project-img span{position:absolute;margin:14px;padding:6px 9px;border-radius:6px;background:rgba(255,255,255,0.9); backdrop-filter:blur(4px); color:var(--blue);font:600 10px 'Space Grotesk'; z-index: 2;}.project-body{padding:22px}.project-body small{color:#9aa7ba;font:600 10px 'Space Grotesk';letter-spacing:.08em}.project-body h3{margin:13px 0 8px;font-size:20px; font-weight: 800;}.project-body p{color:#7b879a;font-size:13px;line-height:1.8;min-height:46px; font-weight: 500;}.project-body a{color:var(--blue);font-size:13px;font-weight:700}
+.process{background:linear-gradient(135deg, var(--navy), #173263);color:#fff;max-width:1320px;margin:auto;padding-top:90px;padding-bottom:90px;position:relative;overflow:hidden;border-top:4px solid var(--blue); border-radius: 20px; box-shadow: 0 30px 60px rgba(16, 36, 74, 0.2);}.process .heading p{color:#a9b8d0}.process .heading h2{color:#fff}.process .num{color:#78a7ff}.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:30px; padding: 0 36px;}.step{padding-top:20px;border-top:1px solid #49648e; transition:0.3s;}.step:hover{transform:translateY(-5px); border-top-color:var(--blue);}.step strong{color:#7ca7ff;font:500 12px 'Space Grotesk'}.step h3{font-size:18px;margin:28px 0 10px; font-weight: 800;}.step p{color:#a9b8d0;font-size:13px;line-height:1.9;margin:0; font-weight: 500;}
+.contact{padding-top:120px;padding-bottom:90px}.contact-box{background:var(--glass-bg); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid var(--glass-border);border-radius:24px;padding:55px 60px;display:grid;grid-template-columns:1fr 1fr;gap:70px; box-shadow: var(--glass-shadow);}.contact h2{font-size:48px;line-height:1.2;letter-spacing:-.08em;margin:18px 0 15px; font-weight: 800;}.contact h2 span{color:var(--blue)}.contact-copy p{max-width:480px;color:#65738c;line-height:2;font-size:15px;margin-bottom:26px; font-weight: 500;}.details{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-content:center}.detail{padding-bottom:14px;border-bottom:1px solid rgba(203,220,242,0.5);display:flex;flex-direction:column;gap:5px; transition:0.3s;}.detail:hover{transform:translateX(-5px); border-color:var(--blue);}.detail span{color:#8494aa;font:600 12px 'Space Grotesk';direction:ltr; display: flex; align-items: center; gap: 8px;}.detail a{color:#1d365e; font-weight:600; font-size:clamp(11px, 3.5vw, 14px); font-family:'Space Grotesk'; direction:ltr; padding-right:25px; white-space:nowrap; overflow:hidden;}
+.footer{max-width:1320px;margin:auto;padding:26px 36px 40px;border-top:1px solid rgba(223,231,243,0.5);display:flex;align-items:center;justify-content:space-between;direction:ltr}.footer small{color:#9aa7b9;font:11px 'Space Grotesk'; font-weight: 600;}.social{display:flex;gap:14px;color:#8b99ac;font:16px 'Space Grotesk'; font-weight: 600;}.social a{transition:0.3s;}.social a:hover{color: var(--blue); transform:translateY(-3px) scale(1.1);}
+
+/* سەحراوییا مەزنکرنا وێنەیان (Lightbox Modal) */
+.lightbox-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 33, 63, 0.85); display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 0; visibility: hidden; transition: 0.4s ease; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.lightbox-overlay.active { opacity: 1; visibility: visible; }
+.lightbox-img { max-width: 90%; max-height: 85vh; border-radius: 12px; box-shadow: 0 15px 50px rgba(0,0,0,0.5); object-fit: contain; transform: scale(0.8) translateY(20px); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.lightbox-overlay.active .lightbox-img { transform: scale(1) translateY(0); }
+.lightbox-close { position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer; font-weight: bold; transition: 0.3s; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+.lightbox-close:hover { color: #ff4757; transform: scale(1.2) rotate(90deg); }
+
+/* راستڤەکرنا ئاراستەیان بۆ زمانێ ئینگلیزی (LTR) */
+body[dir="ltr"] .heading>div:before { right: auto; left: 0; }
+body[dir="ltr"] .heading>div { padding-right: 0; padding-left: 20px; }
+body[dir="ltr"] .trust div { border-right: 0; border-left: 1px solid rgba(223,231,243,0.5); padding-right: 0; padding-left: 24px; }
+body[dir="ltr"] .trust div:first-child { border-left: 0; }
+body[dir="ltr"] .hero { direction: ltr; }
+body[dir="ltr"] .copy { padding-top: 18px; direction: ltr;}
+body[dir="ltr"] .note.a { left: auto; right: -30px; }
+body[dir="ltr"] .note.b { right: auto; left: -25px; }
+body[dir="ltr"] .detail a { padding-right: 0; padding-left: 25px; }
+body[dir="ltr"] .detail:hover{transform:translateX(5px);}
+
+@media(max-width:1020px){.hero{gap:36px;grid-template-columns:1fr 1fr}.services{grid-template-columns:repeat(3,1fr)}.showcase{grid-template-columns:1fr 1fr}.projects{grid-template-columns:1fr 1fr}.project:first-child{grid-column:span 2}}
+@media(max-width:760px){.topbar{padding:0 20px; background: rgba(248, 250, 252, 0.85);}.nav{display:none;position:absolute;top:66px;right:18px;left:18px;padding:15px;background:rgba(255,255,255,0.85); backdrop-filter:blur(20px); border:1px solid var(--glass-border);border-radius:16px;box-shadow:0 20px 40px rgba(29,68,123,0.15);flex-direction:column;align-items:stretch;gap:0}.nav.open{display:flex; animation: slideDown 0.3s ease-out;} @keyframes slideDown { from{opacity:0; transform:translateY(-10px);} to{opacity:1; transform:translateY(0);} } .nav a{padding:12px; border-bottom:1px solid rgba(0,0,0,0.05);}.nav a:last-child{border:0;}.cta{display:none}.menu{display:block}.pad{padding-left:20px;padding-right:20px}.hero{grid-template-columns:1fr;padding-top:45px;min-height:0}.hero h1{font-size:38px}.hero .visual{order:2;margin-top:20px}.note{display:none}.trust{padding:20px;grid-template-columns:repeat(2,1fr);gap:16px}.trust div{padding-right:12px; border-right: none; border-bottom: 1px solid rgba(223,231,243,0.5); padding-bottom: 10px;}.section,.system,.contact{padding-top:75px;padding-bottom:75px}.heading{align-items:flex-start;flex-direction:column;gap:14px}.services{grid-template-columns:1fr 1fr;gap:12px}.service{min-height:205px;padding:16px}.service h3{font-size:14px}.showcase{grid-template-columns:1fr}.projects{grid-template-columns:1fr}.project:first-child{grid-column:span 1}.process{padding-top:70px;padding-bottom:70px; border-radius:0;}.steps{grid-template-columns:1fr 1fr;gap:24px; padding: 0 20px;}.contact-box{grid-template-columns:1fr;padding:32px 24px;gap:35px}.contact h2{font-size:36px}.details{gap:20px}.footer{padding:24px 20px 32px;flex-wrap:wrap;gap:16px}.footer small{width:100%;text-align:center;order:3} body[dir="ltr"] .trust div { border-left: none; }}
+@media(max-width:500px){.services{grid-template-columns:1fr}.hero h1{font-size:34px}.hero-actions{flex-wrap:wrap}.details{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- پەنجەرەیا مەزنکرنا وێنەیان (Lightbox) -->
+<div id="lightbox" class="lightbox-overlay" onclick="closeLightbox()">
+    <span class="lightbox-close">&times;</span>
+    <img id="lightbox-img" class="lightbox-img" src="" alt="Zoomed Image">
+</div>
+
+<div class="shell"><div class="grain"></div>
+<header class="topbar">
+    <a class="brand" href="#top"><span class="brand-mark"></span><span><b>Mediya</b><em>Digital</em></span></a>
+    <nav id="nav" class="nav">
+        <a href="#services" data-i18n="nav_services">خزمەتگوزاری</a>
+        <a href="#systems" data-i18n="nav_systems">سیستەمێن راستەقینە</a>
+        <a href="#work" data-i18n="nav_work">کارێن مە</a>
+        <a href="#contact" data-i18n="nav_contact">پەیوەندی</a>
+    </nav>
+    <div class="actions">
+        <div class="langs">
+            <button class="active" onclick="switchLang('ku')">KU</button>
+            <button onclick="switchLang('en')">EN</button>
+            <button onclick="switchLang('ar')">AR</button>
+        </div>
+        <a class="cta" href="#contact" data-i18n="btn_start">دەستپێبکە ↖️</a>
+        <button id="menu" class="menu" aria-label="menu">☰</button>
+    </div>
+</header>
+
+<main id="top">
+<section class="hero pad">
+    <div class="copy">
+        <div class="eyebrow"><span class="dot"></span> <span data-i18n="hero_badge">MEDIYA DIGITAL / 2026</span></div>
+        <h1 data-i18n="hero_title">سیستەمێن سەردەم،<br><span>بۆ پێشئێخستنا کارێ تە.</span></h1>
+        <p class="lead" data-i18n="hero_desc">ئەم هەمی جۆرێن سیستەمێن بڕێڤەبرنێ (ERP,POS)، وێبسایت و دیزاینێن براندینگێ ب ستانداردێن جیهانی دروست دکەین؛ داکو کارێ تە ب هێز، ب ساناهی و پرۆفێشناڵ بیت.</p>
+        <div class="hero-actions">
+            <a class="primary" href="#services" data-i18n="hero_btn1">خزمەتگوزاریان ببینە ←</a>
+            <a class="text-link" href="#work" data-i18n="hero_btn2">کارێن بەرێ ↖️</a>
+        </div>
+        <div class="meta">
+            <div><strong>+12</strong><span data-i18n="meta_1">جۆرێن خزمەتگوزاریان</span></div>
+            <div><strong>3</strong><span data-i18n="meta_2">زمانێن پشتەڤانیکری</span></div>
+            <div><strong>100%</strong><span data-i18n="meta_3">دیزاینا تایبەت</span></div>
+        </div>
+    </div>
+    <div class="visual">
+        <div class="visual-kicker">LIVE SYSTEM <i></i> READY</div>
+        <div class="frame"><img src="images/hero.png" alt="Mediya Digital system" onclick="openLightbox(this.src)"></div>
+        <div class="note a" data-i18n="note_1">◉ پاراستی و پێشکەفتی</div>
+        <div class="note b" data-i18n="note_2">◌ Online / Offline</div>
+        <div class="index">01 / 04</div>
+    </div>
+</section>
+
+<div class="trust">
+    <div><span data-i18n="trust_1">پشتەڤانیا زمانان</span><b>KU / AR / EN</b></div>
+    <div><span data-i18n="trust_2">دیزاین و دیجیتاڵ</span><b>UI / UX / BRAND</b></div>
+    <div><span data-i18n="trust_3">سیستەم و داتا</span><b>ERP / POS / DATA</b></div>
+    <div><span data-i18n="trust_4">سکیوریتی و پاراستن</span><b>SECURE / CLEAR</b></div>
+</div>
+
+<section id="services" class="section pad">
+    <div class="heading">
+        <div><span class="num">01 —</span><h2 data-i18n="serv_title">ئەم چ دروست دکەین؟</h2></div>
+        <p data-i18n="serv_desc">ژ سیستەمێ مەکتەبێ و کلینیکێ بگرە حەتا پلاتفۆرمێن دیجیتاڵی؛ هەر تشتەک دێ ل دیڤ پێدڤیا کارێ تە هێتە دیزاینکرن ب کوالێتیەکا بلند.</p>
+    </div>
+    <div class="services">
+        <article class="service">
+            <div class="service-media"><img src="images/service1.png" alt="ERP" onclick="openLightbox(this.src)"><span>MEDIYA / 01</span></div>
+            <div class="service-body">
+                <div class="service-top"><span>01</span><b>▣</b></div>
+                <h3 data-i18n="s1_title">سیستەمێن ڕێڤەبەریێ</h3>
+                <p class="en">Business Management</p>
+                <p data-i18n="s1_desc">سیستەمێن ERP و POS بۆ کۆمپانیان، کۆگەهـ و مارکێتان دگەل حسێباتێن هویڕ.</p>
+            </div>
+        </article>
+        <article class="service">
+            <div class="service-media"><img src="images/service2.png" alt="School" onclick="openLightbox(this.src)"><span>MEDIYA / 02</span></div>
+            <div class="service-body">
+                <div class="service-top"><span>02</span><b>▤</b></div>
+                <h3 data-i18n="s2_title">سیستەمێ قوتابخانان</h3>
+                <p class="en">School ERP System</p>
+                <p data-i18n="s2_desc">بڕێڤەبرنا قوتابیان، مامۆستایان، غیابات، نمرە و قیستان ب شێوەیەکێ گەلەک ڕوون.</p>
+            </div>
+        </article>
+        <article class="service">
+            <div class="service-media"><img src="images/service3.png" alt="Clinic" onclick="openLightbox(this.src)"><span>MEDIYA / 03</span></div>
+            <div class="service-body">
+                <div class="service-top"><span>03</span><b>♡</b></div>
+                <h3 data-i18n="s3_title">سیستەمێ کلینیکان</h3>
+                <p class="en">Clinic Management</p>
+                <p data-i18n="s3_desc">نۆرە، دۆسیەیا نەخۆشان، ڕەچەتە، و پارەدان ب شێوەیەکێ تایبەت بۆ دکتۆران.</p>
+            </div>
+        </article>
+        <article class="service">
+            <div class="service-media"><img src="images/service4.png" alt="Cargo" onclick="openLightbox(this.src)"><span>MEDIYA / 04</span></div>
+            <div class="service-body">
+                <div class="service-top"><span>04</span><b>⌘</b></div>
+                <h3 data-i18n="s4_title">سیستەمێ کارگۆ</h3>
+                <p class="en">Logistics & Cargo</p>
+                <p data-i18n="s4_desc">بڕێڤەبرنا باران، نەقلیات، مەنەفێستان، و لێگەڕیانا ئۆنلاین بۆ کریاران.</p>
+            </div>
+        </article>
+        <article class="service">
+            <div class="service-media"><img src="images/service5.jpg" alt="Website" onclick="openLightbox(this.src)"><span>MEDIYA / 05</span></div>
+            <div class="service-body">
+                <div class="service-top"><span>05</span><b>◎</b></div>
+                <h3 data-i18n="s5_title">وێبسایت و پلاتفۆرم</h3>
+                <p class="en">Websites & Platforms</p>
+                <p data-i18n="s5_desc">وێبسایتێن بلەز، ڕێسپۆنسیڤ، و ئامادە بۆ پێشئێخستنا بزنسێ تە ل سەر ئینتەرنێتێ.</p>
+            </div>
+        </article>
+        <article class="service">
+            <div class="service-media"><img src="images/service6.jpg" alt="Invitations" onclick="openLightbox(this.src)"><span>MEDIYA / 06</span></div>
+            <div class="service-body">
+                <div class="service-top"><span>06</span><b>▧</b></div>
+                <h3 data-i18n="s6_title">کارتێن دیجیتاڵی</h3>
+                <p class="en">Digital Invitations</p>
+                <p data-i18n="s6_desc">دروستکرنا کارتێن داوەتان و هەلکەفتان ب شێوێ ئۆنلاین و بارکۆد ب دیزاینەکا جوان.</p>
+            </div>
+        </article>
+        <article class="service">
+            <div class="service-media"><img src="images/service7.png" alt="Branding" onclick="openLightbox(this.src)"><span>MEDIYA / 07</span></div>
+            <div class="service-body">
+                <div class="service-top"><span>07</span><b>✦</b></div>
+                <h3 data-i18n="s7_title">براندینگ و دیزاین</h3>
+                <p class="en">Branding & Design</p>
+                <p data-i18n="s7_desc">دروستکرنا پێناسا بزنسی، لۆگۆ، کارت و سیستەمێ ڕەنگان یێ پرۆفێشناڵ.</p>
+            </div>
+        </article>
+        <article class="service">
+            <div class="service-media"><img src="images/service8.jpg" alt="CV" onclick="openLightbox(this.src)"><span>MEDIYA / 08</span></div>
+            <div class="service-body">
+                <div class="service-top"><span>08</span><b>▤</b></div>
+                <h3 data-i18n="s8_title">CV و پۆرتفۆلیۆ</h3>
+                <p class="en">CV & Portfolio</p>
+                <p data-i18n="s8_desc">دیزاینەکا سەردەم بۆ نیشاندانا کار و شیانێن تە بەرامبەر کۆمپانیان.</p>
+            </div>
+        </article>
+        <article class="service">
+            <div class="service-media"><img src="images/service9.jpg" alt="Digital Menu" onclick="openLightbox(this.src)"><span>MEDIYA / 09</span></div>
+            <div class="service-body">
+                <div class="service-top"><span>09</span><b>▣</b></div>
+                <h3 data-i18n="s9_title">مینیویا دیجیتاڵی</h3>
+                <p class="en">Digital Menu</p>
+                <p data-i18n="s9_desc">دروستکرنا مینیۆیێن دیجیتاڵی بۆ سەر مێزان، دەفتەر و بارکۆد ب شێوەیەکێ بالکێش.</p>
+            </div>
+        </article>
+        <article class="service">
+            <div class="service-media"><img src="images/service10.jpg" alt="Social Media" onclick="openLightbox(this.src)"><span>MEDIYA / 10</span></div>
+            <div class="service-body">
+                <div class="service-top"><span>10</span><b>▤</b></div>
+                <h3 data-i18n="s10_title">دیزاینا سۆشیاڵ میدیایێ</h3>
+                <p class="en">Social Media Design</p>
+                <p data-i18n="s10_desc">دیزاینکرنا پۆست، ستۆری و ڕیکلامێن سۆشیاڵ میدیایێ ب دیزاینێن سەردەم و پرۆفێشناڵ.</p>
+            </div>
+        </article>
+        <article class="service">
+            <div class="service-media"><img src="images/service11.png" alt="Places Advertising" onclick="openLightbox(this.src)"><span>MEDIYA / 11</span></div>
+            <div class="service-body">
+                <div class="service-top"><span>11</span><b>✦</b></div>
+                <h3 data-i18n="s11_title">ڕیکلامێن جهان</h3>
+                <p class="en">Places Advertising</p>
+                <p data-i18n="s11_desc">دروستکرنا پۆست و ستۆریان بۆ ڕیکلاما، خانوبەران، جهێن لەیزەر و جوانکاری و هەر جهەکێ بازرگانی هەوە بڤێت.</p>
+            </div>
+        </article>
+        <!-- بەشێ نوی یێ هاتیە زێدەکرن -->
+        <article class="service">
+            <div class="service-media"><img src="images/service12.png" alt="Books and Materials" onclick="openLightbox(this.src)"><span>MEDIYA / 12</span></div>
+            <div class="service-body">
+                <div class="service-top"><span>12</span><b>◎</b></div>
+                <h3 data-i18n="s12_title">دروستکرنا مەلزەمە و پەرتووکان</h3>
+                <p class="en">Books & Study Materials</p>
+                <p data-i18n="s12_desc">دیزاینکرن و ڕێکخستنا مەلزەمە، پەرتووک و بەرگێن وان ب شێوەیەکێ ئەکادیمی و جوان.</p>
+            </div>
+        </article>
+    </div>
+</section>
+
+<section id="systems" class="system pad">
+    <div class="heading">
+        <div><span class="num">01.5 — SYSTEM DEMOS</span><h2 data-i18n="demo_title">سیستەمێن راستەقینە</h2></div>
+        <p data-i18n="demo_desc">هەر سیستەمەک ژ ڤان ب شێوەیەکێ تایبەت و VIP هاتیە دروستکرن بۆ بازاڕێ کوردستانێ؛ تو دشێی سەحکەیە وان.</p>
+    </div>
+    <div class="showcase">
+        <article class="system-card">
+            <div class="media"><img src="images/demo_school.png" alt="School System" onclick="openLightbox(this.src)"><span class="status"><i></i> LIVE DEMO</span></div>
+            <div class="system-copy">
+                <div class="system-label"><span>SCHOOL ERP</span><b>MEDIYA / 01</b></div>
+                <h3 data-i18n="demo1_title">سیستەمێ قوتابخانان</h3>
+                <p data-i18n="demo1_desc">سیستەمەکێ ئێکگرتی و زیرەک بۆ ڕێڤەبرنا قوتابیان، غیابات، کارتا نمرەیان، و داهاتێن مەکتەبێ ب پۆرتالێ دەیبابان ڤە.</p>
+            </div>
+        </article>
+        <article class="system-card">
+            <div class="media"><img src="images/demo_clinic.png" alt="Clinic System" onclick="openLightbox(this.src)"><span class="status"><i></i> LIVE DEMO</span></div>
+            <div class="system-copy">
+                <div class="system-label"><span>CLINIC ERP</span><b>MEDIYA / 02</b></div>
+                <h3 data-i18n="demo2_title">سیستەمێ کلینیکان</h3>
+                <p data-i18n="demo2_desc">پلاتفۆرمەکا ڕوون بۆ نۆرە، نەخۆشان، وێنەیێن تیشکێ، ڕەچەتە، و ڕێکخستنا دارایی یا کلینیکێن ددانان.</p>
+            </div>
+        </article>
+        <article class="system-card">
+            <div class="media"><img src="images/demo_cargo.png" alt="Cargo System" onclick="openLightbox(this.src)"><span class="status"><i></i> LIVE DEMO</span></div>
+            <div class="system-copy">
+                <div class="system-label"><span>CARGO ERP</span><b>MEDIYA / 03</b></div>
+                <h3 data-i18n="demo3_title">سیستەمێ نەقلیات و کارگۆ</h3>
+                <p data-i18n="demo3_desc">بڕێڤەبرنا ئەمانەتان، پێدانا بارکۆد، لێگەڕیان و دیڤچوونا ئۆنلاین بۆ کریاران دگەل مەنەفێستا شۆفێران.</p>
+            </div>
+        </article>
+    </div>
+</section>
+
+<section id="work" class="section pad">
+    <div class="heading">
+        <div><span class="num">02 —</span><h2 data-i18n="work_title">کار بۆ خۆ دئاخڤیت</h2></div>
+    </div>
+    <div class="projects">
+        <article class="project">
+            <div class="project-img"><span>Systems</span><img src="images/work1.jpg"Business systems" onclick="openLightbox(this.src)"></div>
+            <div class="project-body">
+                <small>01 / CASE STUDY</small>
+                <h3 data-i18n="w1_title">سیستەمێن بڕێڤەبرنا بزنسی</h3>
+                <p data-i18n="w1_desc">داشبۆردەکێ ئێکگرتی بۆ فرۆشتن، کۆگەهـ، کریار و راپۆرتان.</p>
+            </div>
+        </article>
+        <article class="project">
+            <div class="project-img"><span>Branding</span><img src="images/work2.jpg" alt="Branding project" onclick="openLightbox(this.src)"></div>
+            <div class="project-body">
+                <small>02 / CASE STUDY</small>
+                <h3 data-i18n="w2_title">پێناسا براندێ</h3>
+                <p data-i18n="w2_desc">رەنگ، لۆگۆ، کارتا بزنسی و دیزاینێن چاپێ و دیجیتاڵی.</p>
+            </div>
+        </article>
+        <article class="project">
+            <div class="project-img"><span>Data</span><img src="images/work3.png" alt="Data project" onclick="openLightbox(this.src)"></div>
+            <div class="project-body">
+                <small>03 / CASE STUDY</small>
+                <h3 data-i18n="w3_title">داتابەیس و بارکۆد</h3>
+                <p data-i18n="w3_desc">بنیاتەکێ پاراستی بۆ داتا، کۆگەهـ و بارکۆدێن بەرهەمان.</p>
+            </div>
+        </article>
+    </div>
+</section>
+
+<section class="process pad">
+    <div class="heading">
+        <div><span class="num">03 —</span><h2 data-i18n="proc_title">ژ هزرەکێ حەتا سیستەمەکێ</h2></div>
+        <p data-i18n="proc_desc">پرۆژە هەر چەند یێ مەزن بیت، پرۆسەیا کارێ مە یا دیار و ب ساناهیە.</p>
+    </div>
+    <div class="steps">
+        <div class="step"><strong>01</strong><h3 data-i18n="p1_title">تێگەهشتنا پێدڤییان</h3><p data-i18n="p1_desc">ئەم گوهداریا کارێ تە دکەین و کێشە و پێدڤیێن دروست یێن بزنسێ تە دیار دکەین.</p></div>
+        <div class="step"><strong>02</strong><h3 data-i18n="p2_title">دیزاین و پلان</h3><p data-i18n="p2_desc">پلان، UI/UX و لۆژیکا کارێ سیستەمی دێ ب هویری هێتە نەخشاندن و نیشاندان.</p></div>
+        <div class="step"><strong>03</strong><h3 data-i18n="p3_title">دروستکرن (کۆدکرن)</h3><p data-i18n="p3_desc">سیستەم یان وێبسایت ب ستانداردێن جیهانی و سکیوریتیا بلند دێ هێتە دروستکرن.</p></div>
+        <div class="step"><strong>04</strong><h3 data-i18n="p4_title">رادەستکرن و پشتەڤانی</h3><p data-i18n="p4_desc">پشتی رادەستکرنێ ژی، ئەم بۆ گۆهڕین، فێرکاری و پشتەڤانیێ دێ دگەل تە مینین.</p></div>
+    </div>
+</section>
+
+<section id="contact" class="contact pad">
+    <div class="contact-box">
+        <div class="contact-copy">
+            <span class="num">04 — CONTACT</span>
+            <h2 data-i18n="contact_title">ئامادەی بۆ<br><span>دەستپێکرنێ؟</span></h2>
+            <p data-i18n="contact_desc">ئەرێ تە پێدڤی ب سیستەمەکێ، وێبسایتەکێ یان دیزاینەکا نوی هەیە؟ پەیوەندیێ بکە و ب ئازادی بەحسێ هزرێن خۆ بکە.</p>
+            <a class="primary" href="https://wa.me/9647517040052" target="_blank" data-i18n="contact_btn"><i class="fa-brands fa-whatsapp me-2" style="font-size:18px;"></i> نامەیەکێ فرێكە بۆ WhatsApp ↖️</a>
+        </div>
+        <div class="details">
+            <div class="detail">
+                <span><i class="fa-brands fa-whatsapp text-success fs-5"></i> WhatsApp</span>
+                <a href="https://wa.me/9647517040052" target="_blank" dir="ltr">+964 751 704 0052</a>
+            </div>
+            <div class="detail">
+                <span><i class="fa-brands fa-instagram text-danger fs-5"></i> Instagram</span>
+                <a href="https://instagram.com/mediya.digital" target="_blank">@mediya.digital</a>
+            </div>
+            <div class="detail">
+                <span><i class="fa-brands fa-tiktok text-dark fs-5"></i> TikTok</span>
+                <a href="https://tiktok.com/@mediya.digital26" target="_blank">@mediya.digital</a>
+            </div>
+            <div class="detail">
+                <span><i class="fa-solid fa-envelope text-primary fs-5"></i> Email</span>
+                <a href="mailto:mediya.digital26@gmail.com">mediya.digital26@gmail.com</a>
+            </div>
+        </div>
+    </div>
+</section>
+</main>
+<footer class="footer">
+    <a class="brand" href="#top"><span class="brand-mark"></span><span><b>Mediya</b><em>Digital</em></span></a>
+    <small data-i18n="footer_copy">©️ 2026 Mediya Digital — Software & Design</small>
+    <div class="social">
+        <a href="https://instagram.com/mediya.digital" target="_blank"><i class="fa-brands fa-instagram fs-4"></i></a>
+        <a href="https://tiktok.com/@mediya.digital" target="_blank"><i class="fa-brands fa-tiktok fs-4"></i></a>
+        <a href="https://wa.me/9647517040052" target="_blank"><i class="fa-brands fa-whatsapp fs-4"></i></a>
+    </div>
+</footer>
+</div>
+
+<script>
+// مینیویا مۆبایلێ
+const nav=document.getElementById('nav');
+document.getElementById('menu').addEventListener('click',()=>nav.classList.toggle('open'));
+document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
+
+// فەنکشنا مەزنکرنا وێنەیان (Lightbox)
+function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+// فەرهەنگا سێ زمانان ب شێوەیەکێ پرۆفێشناڵ و ئەکادیمی
+const dictionary = {
+    'ku': {
+        dir: 'rtl',
+        nav_services: 'خزمەتگوزاری', nav_systems: 'سیستەمێن راستەقینە', nav_work: 'کارێن مە', nav_contact: 'پەیوەندی',
+        btn_start: 'دەستپێبکە ↖️', hero_badge: 'MEDIYA DIGITAL / 2026', 
+        hero_title: 'سیستەمێن سەردەم،<br><span>بۆ پێشئێخستنا کارێ تە.</span>',
+        hero_desc: 'ئەم هەمی جۆرێن سیستەمێن بڕێڤەبرنێ (ERP)، وێبسایت و دیزاینێن براندینگێ ب ستانداردێن جیهانی دروست دکەین؛ داکو کارێ تە ب هێز، ب ساناهی و پرۆفێشناڵ بیت.',
+        hero_btn1: 'خزمەتگوزاریان ببینە ←', hero_btn2: 'کارێن بەرێ ↖️',
+        meta_1: 'جۆرێن خزمەتگوزاریان', meta_2: 'زمانێن پشتەڤانیکری', meta_3: 'دیزاینا تایبەت',
+        note_1: '◉ پاراستی و پێشکەفتی', note_2: '◌ Online / Offline',
+        trust_1: 'پشتەڤانیا زمانان', trust_2: 'دیزاین و دیجیتاڵ', trust_3: 'سیستەم و داتا', trust_4: 'سکیوریتی و پاراستن',
+        serv_title: 'ئەم چ دروست دکەین؟', serv_desc: 'ژ سیستەمێ مەکتەبێ و کلینیکێ بگرە حەتا پلاتفۆرمێن دیجیتاڵی؛ هەر تشتەک دێ ل دیڤ پێدڤیا کارێ تە هێتە دیزاینکرن ب کوالێتیەکا بلند.',
+        s1_title: 'سیستەمێن ڕێڤەبەریێ', s1_desc: 'سیستەمێن ERP و POS بۆ کۆمپانیان، کۆگەهـ و مارکێتان دگەل حسێباتێن هویڕ.',
+        s2_title: 'سیستەمێ قوتابخانان', s2_desc: 'بڕێڤەبرنا قوتابیان، مامۆستایان، غیابات، نمرە و قیستان ب شێوەیەکێ گەلەک ڕوون.',
+        s3_title: 'سیستەمێ کلینیکان', s3_desc: 'نۆرە، دۆسیەیا نەخۆشان، ڕەچەتە، و پارەدان ب شێوەیەکێ تایبەت بۆ دکتۆران.',
+        s4_title: 'سیستەمێ کارگۆ', s4_desc: 'بڕێڤەبرنا باران، نەقلیات، مەنەفێستان، و لێگەڕیانا ئۆنلاین بۆ کریاران.',
+        s5_title: 'وێبسایت و پلاتفۆرم', s5_desc: 'وێبسایتێن خێرا، ڕێسپۆنسیڤ، و ئامادە بۆ پێشئێخستنا بزنسێ تە ل سەر ئینتەرنێتێ.',
+        s6_title: 'کارتێن دیجیتاڵی', s6_desc: 'دروستکرنا کارتێن داوەتان و هەلکەفتان ب شێوێ ئۆنلاین و بارکۆد ب دیزاینەکا جوان.',
+        s7_title: 'براندینگ و دیزاین', s7_desc: 'دروستکرنا پێناسا بزنسی، لۆگۆ، کارت و سیستەمێ ڕەنگان یێ پرۆفێشناڵ.',
+        s8_title: 'CV و پۆرتفۆلیۆ', s8_desc: 'دیزاینەکا سەردەم بۆ نیشاندانا کار و شیانێن تە بەرامبەر کۆمپانیان.',
+        s9_title: 'مینیویا دیجیتاڵی', s9_desc: 'دروستکرنا مینیۆیێن دیجیتاڵی بۆ سەر مێزان، دەفتەر و بارکۆد ب شێوەیەکێ بالکێش.',
+        s10_title: 'دیزاینا سۆشیاڵ میدیایێ', s10_desc: 'دیزاینکرنا پۆست، ستۆری و ڕیکلامێن سۆشیاڵ میدیایێ ب دیزاینێن سەردەم و پرۆفێشناڵ.',
+        s11_title: 'ڕیکلامێن جهان', s11_desc: 'دروستکرنا پۆست و ستۆریان بۆ ڕیکلاما هەر جهەکێ تە بڤێت، خانوبەران، جهێن لەیزەر و جوانکاری و هەر جهەکێ بازرگانی هەوە بڤێت.',
+        s12_title: 'دروستکرنا مەلزەمە و پەرتووکان', s12_desc: 'دیزاینکرن و ڕێکخستنا مەلزەمە، پەرتووک و بەرگێن وان ب شێوەیەکێ ئەکادیمی و جوان.',
+        demo_title: 'سیستەمێن راستەقینە', demo_desc: 'هەر سیستەمەک ژ ڤان ب شێوەیەکێ تایبەت و VIP هاتیە دروستکرن بۆ بازاڕێ کوردستانێ؛ تو دشێی سەحکەیە وان.',
+        demo1_title: 'سیستەمێ قوتابخانان', demo1_desc: 'سیستەمەکێ ئێکگرتی و زیرەک بۆ ڕێڤەبرنا قوتابیان، غیابات، کارتا نمرەیان و داهاتێن مەکتەبێ ب پۆرتالێ دەیبابان ڤە.',
+        demo2_title: 'سیستەمێ کلینیکان', demo2_desc: 'پلاتفۆرمەکا ڕوون بۆ نۆرە، نەخۆشان، وێنەیێن تیشکێ، ڕەچەتە، و ڕێکخستنا دارایی یا کلینیکێن ددانان.',
+        demo3_title: 'سیستەمێ کارگۆ و نەقلیات', demo3_desc: 'بڕێڤەبرنا ئەمانەتان، پێدانا بارکۆد، لێگەڕیان و دیڤچوونا ئۆنلاین بۆ کریاران دگەل مەنەفێستا شۆفێران.',
+        work_title: 'کار بۆ خۆ دئاخڤیت',
+        w1_title: 'سیستەمێن بڕێڤەبرنا بزنسی', w1_desc: 'داشبۆردەکێ ئێکگرتی بۆ فرۆشتن، کۆگەهـ، کریار و راپۆرتان.',
+        w2_title: 'پێناسا براندێ', w2_desc: 'رەنگ، لۆگۆ، کارتا بزنسی و دیزاینێن چاپێ و دیجیتاڵی.',
+        w3_title: 'داتابەیس و بارکۆد', w3_desc: 'بنیاتەکێ پاراستی بۆ داتا، کۆگەهـ و بارکۆدێن بەرهەمان.',
+        proc_title: 'ژ هزرەکێ حەتا سیستەمەکێ', proc_desc: 'پرۆژە هەر چەند یێ مەزن بیت، پرۆسەیا کارێ مە یا دیار و ب ساناهیە.',
+        p1_title: 'تێگەهشتنا پێدڤییان', p1_desc: 'ئەم گوهداریا کارێ تە دکەین و کێشە و پێدڤیێن دروست یێن بزنسێ تە دیار دکەین.',
+        p2_title: 'دیزاین و پلان', p2_desc: 'پلان، UI/UX و لۆژیکا کارێ سیستەمی دێ ب هویری هێتە نەخشاندن و نیشاندان.',
+        p3_title: 'دروستکرن (کۆدکرن)', p3_desc: 'سیستەم یان وێبسایت ب ستانداردێن جیهانی و سکیوریتیا بلند دێ هێتە دروستکرن.',
+        p4_title: 'رادەستکرن و پشتەڤانی', p4_desc: 'پشتی رادەستکرنێ ژی، ئەم بۆ گۆهڕین، فێرکاری و پشتەڤانیێ دێ دگەل تە مینین.',
+        contact_title: 'ئامادەی بۆ<br><span>دەستپێکرنێ؟</span>', contact_desc: 'ئەرێ تە پێدڤی ب سیستەمەکێ، وێبسایتەکێ یان دیزاینەکا نوی هەیە؟ پەیوەندیێ بکە و ب ئازادی بەحسێ هزرێن خۆ بکە.',
+        contact_btn: 'نامەیەکێ فرێكە بۆ WhatsApp ↖️', footer_copy: '©️ 2026 Mediya Digital — Software & Design'
+    },
+    'en': {
+        dir: 'ltr',
+        nav_services: 'Services', nav_systems: 'Live Demos', nav_work: 'Our Work', nav_contact: 'Contact',
+        btn_start: 'Start Now ↖️', hero_badge: 'MEDIYA DIGITAL / 2026', 
+        hero_title: 'Modern Systems,<br><span>To Elevate Your Business.</span>',
+        hero_desc: 'We build all types of management systems (ERP), websites, and branding designs with global standards to make your business powerful, easy, and professional.',
+        hero_btn1: 'View Services ←', hero_btn2: 'Past Work ↖️',
+        meta_1: 'Types of Services', meta_2: 'Supported Languages', meta_3: 'Custom Design',
+        note_1: '◉ Secure & Advanced', note_2: '◌ Online / Offline',
+        trust_1: 'Multilingual Support', trust_2: 'Design & Digital', trust_3: 'Systems & Data', trust_4: 'Security & Backup',
+        serv_title: 'What Do We Build?', serv_desc: 'From school and clinic systems to digital platforms; everything is custom designed for your business needs with high quality.',
+        s1_title: 'Management Systems', s1_desc: 'ERP and POS systems for companies, warehouses, and markets with precise accounting.',
+        s2_title: 'School Systems', s2_desc: 'Manage students, teachers, attendance, grades, and installments smoothly.',
+        s3_title: 'Clinic Systems', s3_desc: 'Appointments, patient records, prescriptions, and billing specially for doctors.',
+        s4_title: 'Cargo Systems', s4_desc: 'Manage shipments, logistics, manifests, and online tracking for customers.',
+        s5_title: 'Websites & Platforms', s5_desc: 'Fast, responsive websites ready to grow your business on the internet.',
+        s6_title: 'Digital Invitations', s6_desc: 'Creating online invitation cards with barcodes for weddings and events with beautiful designs.',
+        s7_title: 'Branding & Design', s7_desc: 'Creating business identity, logos, cards, and professional color systems.',
+        s8_title: 'CV & Portfolio', s8_desc: 'Modern designs to showcase your work and skills to companies.',
+        s9_title: 'Digital Menu', s9_desc: 'Creating attractive digital menus for tables, notebooks, and barcodes.',
+        s10_title: 'Social Media Design', s10_desc: 'Designing social media posts, stories, and ads with modern and professional designs.',
+        s11_title: 'Places Advertising', s11_desc: 'Creating posts and stories for advertising any place you want, real estate, laser and beauty clinics, and any commercial place you want.',
+        s12_title: 'Books & Study Materials', s12_desc: 'Designing and organizing study materials, books, and their covers in an academic and attractive way.',
+        demo_title: 'Live Systems Demo', demo_desc: 'Each of these systems is custom built and VIP for the Kurdistan market; you can review them.',
+        demo1_title: 'School System', demo1_desc: 'An integrated smart system for managing students, attendance, report cards, and school revenue with a parents portal.',
+        demo2_title: 'Clinic System', demo2_desc: 'A clear platform for appointments, patients, X-rays, prescriptions, and financial organization of dental clinics.',
+        demo3_title: 'Cargo & Logistics System', demo3_desc: 'Managing shipments, generating barcodes, online tracking for customers, and driver manifests.',
+        work_title: 'Our Work Speaks',
+        w1_title: 'Business Management Systems', w1_desc: 'Unified dashboard for sales, inventory, customers, and reports.',
+        w2_title: 'Brand Identity', w2_desc: 'Colors, logos, business cards, and print/digital designs.',
+        w3_title: 'Database & Barcode', w3_desc: 'Secure foundation for data, inventory, and product barcodes.',
+        proc_title: 'From Idea to System', proc_desc: 'No matter how big the project is, our workflow is clear and calm.',
+        p1_title: 'Understanding Needs', p1_desc: 'We listen to your business and define the exact problems and requirements.',
+        p2_title: 'Design & Planning', p2_desc: 'Planning, UI/UX, and system logic will be carefully mapped out and presented.',
+        p3_title: 'Development', p3_desc: 'The system or website will be built with global standards and high security.',
+        p4_title: 'Delivery & Support', p4_desc: 'Even after delivery, we stay with you for modifications, training, and support.',
+        contact_title: 'Ready to<br><span>Start?</span>', contact_desc: 'Do you need a new system, website, or design? Contact us and freely discuss your ideas.',
+        contact_btn: 'Send a message on WhatsApp ↖️', footer_copy: '©️ 2026 Mediya Digital — Software & Design'
+    },
+    'ar': {
+        dir: 'rtl',
+        nav_services: 'خدماتنا', nav_systems: 'الأنظمة', nav_work: 'أعمالنا', nav_contact: 'اتصل بنا',
+        btn_start: 'ابدأ الآن ↖️', hero_badge: 'ميديا ديجيتال / ٢٠٢٦', 
+        hero_title: 'أنظمة حديثة،<br><span>لتطوير أعمالك.</span>',
+        hero_desc: 'نقوم ببناء جميع أنواع أنظمة الإدارة (ERP)، المواقع الإلكترونية، وتصاميم الهوية التجارية بمعايير عالمية لجعل عملك قوياً واحترافياً.',
+        hero_btn1: 'عرض الخدمات ←', hero_btn2: 'أعمالنا السابقة ↖️',
+        meta_1: 'أنواع الخدمات', meta_2: 'لغات مدعومة', meta_3: 'تصميم مخصص',
+        note_1: '◉ آمن ومتقدم', note_2: '◌ متصل / غير متصل',
+        trust_1: 'دعم اللغات', trust_2: 'تصميم ورقمية', trust_3: 'أنظمة وبيانات', trust_4: 'أمان وحماية',
+        serv_title: 'ماذا نبني؟', serv_desc: 'من أنظمة المدارس والعيادات إلى المنصات الرقمية؛ يتم تصميم كل شيء وفقاً لاحتياجات عملك بجودة عالية.',
+        s1_title: 'أنظمة الإدارة', s1_desc: 'أنظمة ERP و POS للشركات، المخازن، والأسواق مع حسابات دقيقة.',
+        s2_title: 'أنظمة المدارس', s2_desc: 'إدارة الطلاب، المعلمين، الغيابات، الدرجات، والأقساط بشكل واضح.',
+        s3_title: 'أنظمة العيادات', s3_desc: 'المواعيد، سجلات المرضى، الوصفات الطبية، والمدفوعات خصيصاً للأطباء.',
+        s4_title: 'أنظمة الشحن (كارغو)', s4_desc: 'إدارة الشحنات، النقل، البيانات، وتتبع الشحنات أونلاين للعملاء.',
+        s5_title: 'مواقع ومنصات', s5_desc: 'مواقع سريعة ومتجاوبة جاهزة لتنمية عملك على الإنترنت.',
+        s6_title: 'بطاقات دعوة رقمية', s6_desc: 'إنشاء بطاقات دعوة أونلاين مع باركود لحفلات الزفاف والمناسبات بتصاميم جميلة.',
+        s7_title: 'العلامة التجارية', s7_desc: 'إنشاء الهوية التجارية، الشعارات، البطاقات، ونظام ألوان احترافي.',
+        s8_title: 'السير الذاتية والمعارض', s8_desc: 'تصاميم حديثة لعرض أعمالك ومهاراتك أمام الشركات.',
+        s9_title: 'قائمة طعام رقمية', s9_desc: 'إنشاء قوائم رقمية جذابة للطاولات، الدفاتر، والباركود.',
+        s10_title: 'تصميم السوشيال ميديا', s10_desc: 'تصميم منشورات، قصص، وإعلانات وسائل التواصل الاجتماعي بتصاميم حديثة واحترافية.',
+        s11_title: 'إعلانات الأماكن', s11_desc: 'إنشاء منشورات وقصص لإعلانات أي مكان تريده، العقارات، عيادات الليزر والتجميل، وأي مكان تجاري ترغب به.',
+        s12_title: 'تصميم الملازم والكتب', s12_desc: 'تصميم وتنسيق الملازم الدراسية، الكتب وأغلفتها بأسلوب أكاديمي وجذاب.',
+        demo_title: 'أنظمة حية', demo_desc: 'كل من هذه الأنظمة تم بناؤه بشكل خاص و VIP لسوق كردستان؛ يمكنك مراجعتها.',
+        demo1_title: 'نظام المدارس', demo1_desc: 'نظام ذكي متكامل لإدارة الطلاب، الحضور، بطاقات الدرجات، وإيرادات المدرسة مع بوابة للآباء.',
+        demo2_title: 'نظام العيادات', demo2_desc: 'منصة واضحة للمواعيد، المرضى، الأشعة، الوصفات الطبية، والتنظيم المالي لعيادات الأسنان.',
+        demo3_title: 'نظام الشحن والنقليات', demo3_desc: 'إدارة الأمانات، إصدار الباركود، تتبع أونلاين للعملاء، مع قائمة (مانيفيست) للسائقين.',
+        work_title: 'أعمالنا تتحدث',
+        w1_title: 'أنظمة إدارة الأعمال', w1_desc: 'لوحة قيادة موحدة للمبيعات، المخزون، العملاء، والتقارير.',
+        w2_title: 'الهوية التجارية', w2_desc: 'الألوان، الشعارات، بطاقات العمل، والتصاميم المطبوعة والرقمية.',
+        w3_title: 'قواعد البيانات والباركود', w3_desc: 'أساس آمن للبيانات، المخزون، وباركود المنتجات.',
+        proc_title: 'من فكرة إلى نظام', proc_desc: 'مهما كان حجم المشروع كبيراً، فإن سير عملنا واضح وهادئ.',
+        p1_title: 'فهم الاحتياجات', p1_desc: 'نستمع إلى عملك ونحدد المشاكل والاحتياجات الدقيقة.',
+        p2_title: 'التصميم والتخطيط', p2_desc: 'سيتم تخطيط وعرض واجهة المستخدم وتجربة المستخدم ومنطق النظام بعناية.',
+        p3_title: 'البرمجة (التطوير)', p3_desc: 'سيتم بناء النظام أو الموقع بمعايير عالمية وأمان عالي.',
+        p4_title: 'التسليم والدعم', p4_desc: 'حتى بعد التسليم، نبقى معك لإجراء التعديلات، التدريب، والدعم.',
+        contact_title: 'جاهز<br><span>للبدء؟</span>', contact_desc: 'هل تحتاج إلى نظام، موقع، أو تصميم جديد؟ اتصل بنا وناقش أفكارك بحرية.',
+        contact_btn: 'أرسل رسالة على واتساب ↖️', footer_copy: '©️ ٢٠٢٦ ميديا ديجيتال — برمجيات وتصميم'
+    }
+};
+
+function switchLang(langCode) {
+    const data = dictionary[langCode];
+    if(!data) return;
+    document.querySelectorAll('.langs button').forEach(btn => {
+        btn.classList.remove('active');
+        if(btn.innerText.toLowerCase() === langCode) btn.classList.add('active');
+    });
+    document.body.setAttribute('dir', data.dir);
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if(data[key]) { el.innerHTML = data[key]; }
+    });
+}
+</script>
+</body>
+</html>
